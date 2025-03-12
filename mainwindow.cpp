@@ -8,19 +8,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->lblRezept->setFont(QFont("Courier New"));
-    ui->lblRezept->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    ui->lstRezept->setFont(QFont("Courier New"));
 
     m_SeifenRezept.ZutatenListeSetzen(&m_ZutatenListe);
-
-    //ui->lblFette->setText("Fette / Öle");
-    //ui->lblFettName->setText("Name");
-    //ui->lblFettMenge->setText("Menge in Gramm");
 
     connect(ui->cmdZutaten, SIGNAL(clicked()), SLOT(cmdZutatenClicked()));
     connect(ui->cmdFettHnzufuegen, SIGNAL(clicked()), SLOT(cmdFettHnzufuegenClicked()));
     connect(ui->edtSeifenName, SIGNAL(editingFinished()), SLOT(edtSeifenName()));
     connect(ui->cmdBerechnen, SIGNAL(clicked()), SLOT(cmdBerechnen()));
+    connect(ui->cmdLoeschen, SIGNAL(clicked()), SLOT(cmdLoeschen()));
 }
 
 MainWindow::~MainWindow()
@@ -28,28 +24,51 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::cmdLoeschen()
+{
+    QString QAuswahl;
+    bool ist_geloescht;
+
+    if(NULL != ui->lstRezept->currentItem())
+    {
+        QAuswahl = ui->lstRezept->currentItem()->text();
+
+        ist_geloescht = m_SeifenRezept.ZutatLoeschen(QAuswahl.toStdString());
+
+        if(false == ist_geloescht)
+        {
+            StatusAusgabe("Eintrag nicht gefunden");
+        }
+        else
+        {
+            StatusAusgabe(QAuswahl.toStdString() + " -> gelöscht");
+            RezeptAusgeben();
+        }
+    }
+    else
+    {
+        StatusAusgabe("Nichts ausgwählt");
+    }
+}
+
+
 void MainWindow::cmdBerechnen()
 {
-    string Ausgabe;
-
     m_SeifenRezept.Berechnen();
-    m_SeifenRezept.RezeptAusgabeBildschirm(&Ausgabe);
 
-     ui->lblRezept->setText(Ausgabe.c_str());
+    RezeptAusgeben();
 }
 
 void MainWindow::edtSeifenName()
 {
     string Name;
-    string Ausgabe;
     QString Qname = ui->edtSeifenName->text();
 
     Name = Qname.toStdString();
 
     m_SeifenRezept.NamenSetzen(Name);
 
-    m_SeifenRezept.RezeptAusgabeBildschirm(&Ausgabe);
-    ui->lblRezept->setText(Ausgabe.c_str());
+    RezeptAusgeben();
 }
 
 void MainWindow::cmdZutatenClicked()
@@ -80,7 +99,7 @@ void MainWindow::cmdFettHnzufuegenClicked()
 
     if(!((fett_in_gramm > 0) && (fett_in_gramm <= 1000)))
     {
-        ui->lblFehlerAusgabe->setText("Unkorrekte Fettmenge eingegeben");
+        StatusAusgabe("Unkorrekte Fettmenge eingegeben");
         return;
     }
     else
@@ -89,20 +108,38 @@ void MainWindow::cmdFettHnzufuegenClicked()
 
         if(true == ok)
         {
+            vector <string> Ausgabe;
             char output[100];
-            string Ausgabe;
-
-            m_SeifenRezept.RezeptAusgabeBildschirm(&Ausgabe);
-            ui->lblRezept->setText(Ausgabe.c_str());
 
             sprintf(output, "%dg %s hinzugefügt", fett_in_gramm, fett_name.toStdString().c_str());
 
-            ui->lblFehlerAusgabe->setText(output);
+            StatusAusgabe(output);
+
+            RezeptAusgeben();
         }
         else
         {
-            ui->lblFehlerAusgabe->setText("Falsche Eingabe");
+            StatusAusgabe("Falsche Eingabe");
         }
     }
+}
 
+void MainWindow::RezeptAusgeben(void)
+{
+    int i;
+    vector <string> l_Ausgabe;
+
+    m_SeifenRezept.RezeptAusgabeBildschirm(&l_Ausgabe);
+
+    ui->lstRezept->clear();
+
+    for(i = 0; i < l_Ausgabe.size(); i++)
+    {
+        ui->lstRezept->addItem(l_Ausgabe[i].c_str());
+    }
+}
+
+void  MainWindow::StatusAusgabe(string Ausgabe)
+{
+    ui->lblFehlerAusgabe->setText(Ausgabe.c_str());
 }

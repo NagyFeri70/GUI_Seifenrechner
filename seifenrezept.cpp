@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+using namespace std;
 
 SeifenRezept::SeifenRezept() : ZutatenListe()
 {
@@ -35,7 +36,7 @@ void SeifenRezept::ZutatenListeSetzen(ZutatenListe *p_ZutatenListe)
     m_pZutatenListe = p_ZutatenListe;
 }
 
-bool SeifenRezept::RezeptAusgabeBildschirm(string *Ausgabe)
+bool SeifenRezept::RezeptAusgabeBildschirm(vector<string> *Ausgabe)
 {
     bool RetVal = true;
     float AnteilNaOH;
@@ -45,14 +46,14 @@ bool SeifenRezept::RezeptAusgabeBildschirm(string *Ausgabe)
 
     Ausgabe->clear();
 
-    Ausgabe->append(m_Name + "\n\n");
+    Ausgabe->push_back(m_Name + "\n");
 
     for(i = 0; i < m_Fette.size(); i++)
     {
         sprintf(ch, "%4d", m_Fette[i].MasseLesen());
         Masse = ch;
 
-        Ausgabe->append(Masse + " g " + m_Fette[i].NamenLesen() + "\n");
+        Ausgabe->push_back(Masse + " g " + m_Fette[i].NamenLesen());
     }
 
     if((m_MengeNaOH > 1.0f) && (m_MengeWasser > 1.0f))
@@ -60,15 +61,15 @@ bool SeifenRezept::RezeptAusgabeBildschirm(string *Ausgabe)
         masse_gerundet = (int)(m_MengeWasser + 0.5f);
         sprintf(ch, "%4d", masse_gerundet);
         Masse = ch;
-        Ausgabe->append("\n" + Masse + " g " + "Wasser" + "\n\n");
+        Ausgabe->push_back("\n" + Masse + " g " + "Wasser" + "\n");
 
         for(i = 4; i <= 8; i++)
         {            
             AnteilNaOH = m_MengeNaOH * (100.0f -(float)i) * 0.01f;
             masse_gerundet = (int)(AnteilNaOH + 0.5f);
-            sprintf(ch, "%4d g NaOH - %d %% Überfettung\n", masse_gerundet, i);
+            sprintf(ch, "%4d g NaOH - %d %% Überfettung", masse_gerundet, i);
             Masse = ch;
-            Ausgabe->append(Masse);
+            Ausgabe->push_back(Masse);
         }
     }
 
@@ -90,8 +91,7 @@ bool SeifenRezept::FettHinzufuegen(int p_Fettnummer, int fett_in_gramm)
 
         l_zutat.MasseSetzen(fett_in_gramm);
 
-        m_MengeNaOH = 0.0f;
-        m_MengeWasser = 0.0f;
+        BerechnungLoeschen();
 
         for(i = 0; i < m_Fette.size(); i++)
         {
@@ -118,4 +118,29 @@ bool SeifenRezept::FettHinzufuegen(int p_Fettnummer, int fett_in_gramm)
     }
 
     return(RetVal);
+}
+
+bool SeifenRezept::ZutatLoeschen(const string &p_string)
+{
+    bool RetVal = false;
+    int i;
+
+    for(i = 0; i < m_Fette.size(); i++)
+    {
+        if(string::npos != (p_string.find(m_Fette[i].LeseNamen())))
+        {
+            BerechnungLoeschen();
+
+            m_Fette.erase(m_Fette.begin() + i);
+            RetVal = true;
+        }
+    }
+
+    return(RetVal);
+}
+
+void SeifenRezept::BerechnungLoeschen(void)
+{
+    m_MengeNaOH = 0.0f;
+    m_MengeWasser = 0.0f;
 }
