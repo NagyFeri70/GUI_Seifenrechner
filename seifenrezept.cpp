@@ -56,6 +56,14 @@ bool SeifenRezept::RezeptAusgabeBildschirm(vector<string> *Ausgabe)
         Ausgabe->push_back(Masse + " g " + m_Fette[i].NamenLesen());
     }
 
+    for(i = 0; i < m_AetherischeOele.size(); i++)
+    {
+        sprintf(ch, "%4d", m_AetherischeOele[i].MasseLesen());
+        Masse = ch;
+
+        Ausgabe->push_back(Masse + " g " + m_AetherischeOele[i].NamenLesen());
+    }
+
     if((m_MengeNaOH > 1.0f) && (m_MengeWasser > 1.0f))
     {
         masse_gerundet = (int)(m_MengeWasser + 0.5f);
@@ -77,8 +85,7 @@ bool SeifenRezept::RezeptAusgabeBildschirm(vector<string> *Ausgabe)
     return RetVal;
 }
 
-
-bool SeifenRezept::FettHinzufuegen(int p_Fettnummer, int fett_in_gramm)
+bool  SeifenRezept::AetherischesOelHinzufuegen(int p_nummer, int p_gramm)
 {
     bool RetVal = true;
     Zutat l_zutat;
@@ -87,30 +94,29 @@ bool SeifenRezept::FettHinzufuegen(int p_Fettnummer, int fett_in_gramm)
 
     if(NULL != m_pZutatenListe)
     {
+        m_pZutatenListe->LesenAetherischesOel(p_nummer, &l_zutat);
+
+        RetVal = ZutatHinzufuegen(l_zutat, p_gramm, m_AetherischeOele);
+    }
+    else
+    {
+        RetVal = false;
+    }
+
+
+    return(RetVal);
+}
+
+bool SeifenRezept::FettHinzufuegen(int p_Fettnummer, int fett_in_gramm)
+{
+    bool RetVal = true;
+    Zutat l_zutat;
+
+    if(NULL != m_pZutatenListe)
+    {
         m_pZutatenListe->LesenFett(p_Fettnummer, &l_zutat);
 
-        l_zutat.MasseSetzen(fett_in_gramm);
-
-        BerechnungLoeschen();
-
-        for(i = 0; i < m_Fette.size(); i++)
-        {
-            if(l_zutat.LeseNamen() == m_Fette[i].LeseNamen())
-            {
-                found = true;
-                break;
-            }
-        }
-
-        if(false == found)
-        {
-            m_Fette.push_back(l_zutat);
-        }
-        else
-        {
-            m_Fette[i] = l_zutat;
-        }
-
+        RetVal = ZutatHinzufuegen(l_zutat, fett_in_gramm, m_Fette);
     }
     else
     {
@@ -120,24 +126,75 @@ bool SeifenRezept::FettHinzufuegen(int p_Fettnummer, int fett_in_gramm)
     return(RetVal);
 }
 
+bool SeifenRezept::ZutatHinzufuegen(Zutat &p_Zutat, unsigned int p_MasseInGramm, vector<Zutat> &p_ZutatenListe)
+{
+    bool RetVal = true;
+    int i;
+    bool found = false;
+
+    BerechnungLoeschen();
+
+    p_Zutat.MasseSetzen(p_MasseInGramm);
+
+    for(i = 0; i < p_ZutatenListe.size(); i++)
+    {
+        if(p_Zutat.LeseNamen() == p_ZutatenListe[i].LeseNamen())
+        {
+            found = true;
+            break;
+        }
+    }
+
+    if(false == found)
+    {
+        p_ZutatenListe.push_back(p_Zutat);
+    }
+    else
+    {
+        p_ZutatenListe[i] = p_Zutat;
+    }
+
+    return(RetVal);
+}
+
 bool SeifenRezept::ZutatLoeschen(const string &p_string)
+{
+    bool RetVal = false;
+
+    RetVal = ZutatLoeschen(p_string, m_Fette);
+    if(true == RetVal)
+    {
+        return(RetVal);
+    }
+
+    RetVal = ZutatLoeschen(p_string, m_AetherischeOele);
+    if(true == RetVal)
+    {
+        return(RetVal);
+    }
+
+    return(RetVal);
+}
+
+bool SeifenRezept::ZutatLoeschen(const string &p_string, vector<Zutat> &ZutatenListe)
 {
     bool RetVal = false;
     int i;
 
-    for(i = 0; i < m_Fette.size(); i++)
+    for(i = 0; i < ZutatenListe.size(); i++)
     {
-        if(string::npos != (p_string.find(m_Fette[i].LeseNamen())))
+        if(string::npos != (p_string.find(ZutatenListe[i].LeseNamen())))
         {
             BerechnungLoeschen();
 
-            m_Fette.erase(m_Fette.begin() + i);
+            ZutatenListe.erase(ZutatenListe.begin() + i);
             RetVal = true;
         }
     }
 
     return(RetVal);
 }
+
 
 void SeifenRezept::BerechnungLoeschen(void)
 {

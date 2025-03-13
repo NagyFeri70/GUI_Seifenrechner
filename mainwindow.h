@@ -30,9 +30,11 @@ private:
 
 private slots:
     void cmdZutatenClicked();
-    void cmdFettHnzufuegenClicked();
     void edtSeifenName();
     void cmdBerechnen();
     void cmdLoeschen();
+
+    void cmdFettHnzufuegenClicked();
+    void cmdAetherischesOelHinzufuegenClicked();
 };
 #endif // MAINWINDOW_H

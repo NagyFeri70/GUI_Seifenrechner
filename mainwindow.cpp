@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->cmdZutaten, SIGNAL(clicked()), SLOT(cmdZutatenClicked()));
     connect(ui->cmdFettHnzufuegen, SIGNAL(clicked()), SLOT(cmdFettHnzufuegenClicked()));
+    connect(ui->cmdAethOel, SIGNAL(clicked()),  SLOT(cmdAetherischesOelHinzufuegenClicked()));
     connect(ui->edtSeifenName, SIGNAL(editingFinished()), SLOT(edtSeifenName()));
     connect(ui->cmdBerechnen, SIGNAL(clicked()), SLOT(cmdBerechnen()));
     connect(ui->cmdLoeschen, SIGNAL(clicked()), SLOT(cmdLoeschen()));
@@ -87,6 +88,14 @@ void MainWindow::cmdZutatenClicked()
             ui->cmbFette->addItem(l_name.c_str());
             i++;
         }  while(l_name.size() > 0);
+
+        i= 0;
+        do
+        {
+            l_name = m_ZutatenListe.LesenAetherischesOelName(i);
+            ui->cmbAetherischeOele->addItem(l_name.c_str());
+            i++;
+        }  while(l_name.size() > 0);
     }
 }
 
@@ -112,6 +121,40 @@ void MainWindow::cmdFettHnzufuegenClicked()
             char output[100];
 
             sprintf(output, "%dg %s hinzugefügt", fett_in_gramm, fett_name.toStdString().c_str());
+
+            StatusAusgabe(output);
+
+            RezeptAusgeben();
+        }
+        else
+        {
+            StatusAusgabe("Falsche Eingabe");
+        }
+    }
+}
+
+void MainWindow::cmdAetherischesOelHinzufuegenClicked()
+{
+    bool ok;
+    int gramm = ui->edtAetherischOele->text().toInt();
+    QString name = ui->cmbAetherischeOele->currentText();
+    int index = ui->cmbAetherischeOele->currentIndex();
+
+    if(!((gramm > 0) && (gramm <= 1000)))
+    {
+        StatusAusgabe("Unkorrekte Fettmenge eingegeben");
+        return;
+    }
+    else
+    {
+        ok = m_SeifenRezept.AetherischesOelHinzufuegen(index, gramm);
+
+        if(true == ok)
+        {
+            vector <string> Ausgabe;
+            char output[100];
+
+            sprintf(output, "%dg %s hinzugefügt", gramm, name.toStdString().c_str());
 
             StatusAusgabe(output);
 

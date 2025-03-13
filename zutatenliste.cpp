@@ -17,6 +17,20 @@ void ZutatenListe::InhaltLoeschen(void)
     m_Sontiges.clear();
 }
 
+string ZutatenListe::LesenAetherischesOelName(unsigned int i)
+{
+    string l_string;
+
+    l_string.clear();
+
+    if(i < m_AetherischeOele.size())
+    {
+        l_string = m_AetherischeOele[i].LeseNamen();
+    }
+
+    return(l_string);
+}
+
 string ZutatenListe::LesenFettName(unsigned int i)
 {
     string l_string;
@@ -35,9 +49,27 @@ bool ZutatenListe::LesenFett(int i, Zutat *pZutat)
 {
     bool RetVal = true;
 
-    if((i >= 0) && (i < m_Fette.size()))
+    RetVal = ZutatLesen(i, pZutat, m_Fette);
+
+    return(RetVal);
+}
+
+bool ZutatenListe::LesenAetherischesOel(int i, Zutat *pZutat)
+{
+    bool RetVal = true;
+
+    RetVal = ZutatLesen(i, pZutat, m_AetherischeOele);
+
+    return(RetVal);
+}
+
+bool ZutatenListe::ZutatLesen(int i, Zutat *pZutat, vector<Zutat> &pZutatenListe)
+{
+    bool RetVal = true;
+
+    if((i >= 0) && (i < pZutatenListe.size()))
     {
-        *pZutat = m_Fette[i];
+        *pZutat = pZutatenListe[i];
     }
     else
     {
