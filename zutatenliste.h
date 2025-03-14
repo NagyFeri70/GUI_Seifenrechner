@@ -23,6 +23,8 @@ protected:
     vector<Zutat> m_ParfuemOele;
     vector<Zutat> m_TonErden;
     vector<Zutat> m_Sontiges;
+    vector<Zutat> m_Kraeuter;
+    vector<Zutat> m_Fluessigkeiten;
 
     void        InhaltLoeschen(void);
     bool        ZutatLesen(int i, Zutat *pZutat, vector<Zutat> &pZutatenListe);

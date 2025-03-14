@@ -126,6 +126,14 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
                     {
                         zutatentyp = SONTIGES;
                     }
+                    else if((string::npos != inhaltzeile.find("-[Kraeuter]")))
+                    {
+                        zutatentyp = KRAEUTER;
+                    }
+                    else if((string::npos != inhaltzeile.find("-[Flüssigkeiten]")))
+                    {
+                        zutatentyp = FLUESSIGKEITEN;
+                    }
                     else
                     {
                         zutatentyp = UNBEKANNT;
@@ -160,6 +168,16 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
                         case SONTIGES:
                         {
                             m_Sontiges.push_back(l_Zutat);
+                            break;
+                        }
+                        case KRAEUTER:
+                        {
+                            m_Kraeuter.push_back(l_Zutat);
+                            break;
+                        }
+                        case FLUESSIGKEITEN:
+                        {
+                            m_Fluessigkeiten.push_back(l_Zutat);
                             break;
                         }
                         default:

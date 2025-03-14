@@ -13,6 +13,8 @@ typedef enum
     TONERDE,
     PARFUEMOEL,
     SONTIGES,
+    KRAEUTER,
+    FLUESSIGKEITEN,
     UNBEKANNT
 
 } ZutatenTyp_e;
