@@ -29,12 +29,19 @@ private:
     void StatusAusgabe(string Ausgabe);
 
 private slots:
+    // Zutatenliste oeffnen
     void cmdZutatenClicked();
+
+    // Seifennamen festlegen
     void edtSeifenName();
+
+    // Rezept bearbeiten
     void cmdBerechnen();
     void cmdLoeschen();
 
+    // Zutat hinzufuegen
     void cmdFettHnzufuegenClicked();
     void cmdAetherischesOelHinzufuegenClicked();
+    void cmdTonerdeHinzufuegenClicked();
 };
 #endif // MAINWINDOW_H

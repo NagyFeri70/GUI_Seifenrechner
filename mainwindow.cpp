@@ -12,10 +12,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_SeifenRezept.ZutatenListeSetzen(&m_ZutatenListe);
 
+    // Zutatenliste oeffnen
     connect(ui->cmdZutaten, SIGNAL(clicked()), SLOT(cmdZutatenClicked()));
+
+    // Zutat hinzufuegen
     connect(ui->cmdFettHnzufuegen, SIGNAL(clicked()), SLOT(cmdFettHnzufuegenClicked()));
-    connect(ui->cmdAethOel, SIGNAL(clicked()),  SLOT(cmdAetherischesOelHinzufuegenClicked()));
+    connect(ui->cmdAethOelHinzufuegen, SIGNAL(clicked()),  SLOT(cmdAetherischesOelHinzufuegenClicked()));
+    connect(ui->cmdTonerdenHinufuegen, SIGNAL(clicked()), SLOT(cmdTonerdeHinzufuegenClicked()));
+
+    // Seifennamen festlegen
     connect(ui->edtSeifenName, SIGNAL(editingFinished()), SLOT(edtSeifenName()));
+
+    // Rezept bearbeiten
     connect(ui->cmdBerechnen, SIGNAL(clicked()), SLOT(cmdBerechnen()));
     connect(ui->cmdLoeschen, SIGNAL(clicked()), SLOT(cmdLoeschen()));
 }
@@ -96,6 +104,14 @@ void MainWindow::cmdZutatenClicked()
             ui->cmbAetherischeOele->addItem(l_name.c_str());
             i++;
         }  while(l_name.size() > 0);
+
+        i= 0;
+        do
+        {
+            l_name = m_ZutatenListe.LesenTonerdeName(i);
+            ui->cmbTonerden->addItem(l_name.c_str());
+            i++;
+        }  while(l_name.size() > 0);
     }
 }
 
@@ -133,6 +149,40 @@ void MainWindow::cmdFettHnzufuegenClicked()
     }
 }
 
+void MainWindow::cmdTonerdeHinzufuegenClicked()
+{
+    bool ok;
+    int gramm = ui->edtTonerden->text().toInt();
+    QString name = ui->cmbTonerden->currentText();
+    int index = ui->cmbTonerden->currentIndex();
+
+    if(!((gramm > 0) && (gramm <= 1000)))
+    {
+        StatusAusgabe("Unkorrekte Menge eingegeben");
+        return;
+    }
+    else
+    {
+        ok = m_SeifenRezept.TonerdeHinzufuegen(index, gramm);
+
+        if(true == ok)
+        {
+            vector <string> Ausgabe;
+            char output[100];
+
+            sprintf(output, "%dg %s hinzugefügt", gramm, name.toStdString().c_str());
+
+            StatusAusgabe(output);
+
+            RezeptAusgeben();
+        }
+        else
+        {
+            StatusAusgabe("Falsche Eingabe");
+        }
+    }
+}
+
 void MainWindow::cmdAetherischesOelHinzufuegenClicked()
 {
     bool ok;
@@ -142,7 +192,7 @@ void MainWindow::cmdAetherischesOelHinzufuegenClicked()
 
     if(!((gramm > 0) && (gramm <= 1000)))
     {
-        StatusAusgabe("Unkorrekte Fettmenge eingegeben");
+        StatusAusgabe("Unkorrekte Menge eingegeben");
         return;
     }
     else

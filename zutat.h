@@ -33,6 +33,8 @@ public:
     string      NamenLesen(void)            { return(m_Name); };
     float       VerseifungszahlLesen(void)  { return(m_Verseifungszahl); };
 
+    //Zutat       operator = (const Zutat &other);
+
 private:
     ZutatenTyp_e    m_ZutatenTyp;
 

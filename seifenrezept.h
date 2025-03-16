@@ -19,6 +19,8 @@ public:
 
     bool AetherischesOelHinzufuegen(int p_nummer, int p_gramm);
     bool FettHinzufuegen(int p_Fettnummer, int fett_in_gramm);
+    bool TonerdeHinzufuegen(int p_Fettnummer, int fett_in_gramm);
+
 
     private:
         ZutatenListe *m_pZutatenListe;

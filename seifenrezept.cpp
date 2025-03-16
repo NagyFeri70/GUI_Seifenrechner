@@ -40,28 +40,29 @@ bool SeifenRezept::RezeptAusgabeBildschirm(vector<string> *Ausgabe)
 {
     bool RetVal = true;
     float AnteilNaOH;
-    int i, masse_gerundet;
+    int i, y, masse_gerundet;
     char ch[250] = { 0 };
     string Masse;
+    Zutat l_zutat;
 
     Ausgabe->clear();
 
     Ausgabe->push_back(m_Name + "\n");
 
-    for(i = 0; i < m_Fette.size(); i++)
+    y = 0;
+    while(NULL != m_pAlleZutaten[y])
     {
-        sprintf(ch, "%4d", m_Fette[i].MasseLesen());
-        Masse = ch;
+        for(i = 0; i < m_pAlleZutaten[y]->size(); i++)
+        {
+            l_zutat = (*m_pAlleZutaten[y])[i];
 
-        Ausgabe->push_back(Masse + " g " + m_Fette[i].NamenLesen());
-    }
+            sprintf(ch, "%4d", l_zutat.MasseLesen());
+            Masse = ch;
 
-    for(i = 0; i < m_AetherischeOele.size(); i++)
-    {
-        sprintf(ch, "%4d", m_AetherischeOele[i].MasseLesen());
-        Masse = ch;
+            Ausgabe->push_back(Masse + " g " + l_zutat.NamenLesen());
+        }
 
-        Ausgabe->push_back(Masse + " g " + m_AetherischeOele[i].NamenLesen());
+        y++;
     }
 
     if((m_MengeNaOH > 1.0f) && (m_MengeWasser > 1.0f))
@@ -122,6 +123,28 @@ bool SeifenRezept::FettHinzufuegen(int p_Fettnummer, int fett_in_gramm)
     {
         RetVal = false;
     }
+
+    return(RetVal);
+}
+
+bool SeifenRezept::TonerdeHinzufuegen(int p_nummer, int p_gramm)
+{
+    bool RetVal = true;
+    Zutat l_zutat;
+    int i;
+    bool found = false;
+
+    if(NULL != m_pZutatenListe)
+    {
+        m_pZutatenListe->LesenTonerde(p_nummer, &l_zutat);
+
+        RetVal = ZutatHinzufuegen(l_zutat, p_gramm, m_TonErden);
+    }
+    else
+    {
+        RetVal = false;
+    }
+
 
     return(RetVal);
 }

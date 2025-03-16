@@ -31,7 +31,7 @@
    <widget class="QComboBox" name="cmbFette">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>100</x>
       <y>100</y>
       <width>230</width>
       <height>25</height>
@@ -41,7 +41,7 @@
    <widget class="QLabel" name="lblFette">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>100</y>
       <width>81</width>
       <height>16</height>
@@ -54,7 +54,7 @@
    <widget class="QPushButton" name="cmdFettHnzufuegen">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>460</x>
       <y>100</y>
       <width>80</width>
       <height>25</height>
@@ -67,7 +67,7 @@
    <widget class="QLineEdit" name="edtFettMenge">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>340</x>
       <y>100</y>
       <width>113</width>
       <height>25</height>
@@ -77,7 +77,7 @@
    <widget class="QLabel" name="lblFettName">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>100</x>
       <y>80</y>
       <width>58</width>
       <height>15</height>
@@ -90,7 +90,7 @@
    <widget class="QLabel" name="lblFettMenge">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>340</x>
       <y>80</y>
       <width>111</width>
       <height>16</height>
@@ -116,7 +116,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>100</x>
       <y>10</y>
       <width>101</width>
       <height>16</height>
@@ -129,7 +129,7 @@
    <widget class="QLineEdit" name="edtSeifenName">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>100</x>
       <y>30</y>
       <width>191</width>
       <height>25</height>
@@ -175,8 +175,8 @@
    <widget class="QLineEdit" name="edtAetherischOele">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>140</y>
+      <x>340</x>
+      <y>130</y>
       <width>113</width>
       <height>25</height>
      </rect>
@@ -185,18 +185,18 @@
    <widget class="QComboBox" name="cmbAetherischeOele">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>140</y>
+      <x>100</x>
+      <y>130</y>
       <width>230</width>
       <height>25</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="cmdAethOel">
+   <widget class="QPushButton" name="cmdAethOelHinzufuegen">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>140</y>
+      <x>460</x>
+      <y>130</y>
       <width>80</width>
       <height>25</height>
      </rect>
@@ -208,14 +208,60 @@
    <widget class="QLabel" name="lblAetherischeOele">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>140</y>
+      <x>10</x>
+      <y>130</y>
       <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>Ätherische Öle</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblTonerden">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Tonerden</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="edtTonerden">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>160</y>
+      <width>113</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cmbTonerden">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>160</y>
+      <width>230</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="cmdTonerdenHinufuegen">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>160</y>
+      <width>80</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hinzufügen</string>
     </property>
    </widget>
   </widget>

@@ -12,10 +12,14 @@ public:
     ZutatenListe();
 
     bool    ZutatenDateiOeffnen(string Dateiname);
-    string  LesenFettName(unsigned int i);
-    string  LesenAetherischesOelName(unsigned int i);
+
     bool    LesenFett(int i, Zutat *pZutat);
     bool    LesenAetherischesOel(int i, Zutat *pZutat);
+    bool    LesenTonerde(int i, Zutat *pZutat);
+
+    string  LesenTonerdeName(unsigned int i);
+    string  LesenFettName(unsigned int i);
+    string  LesenAetherischesOelName(unsigned int i);
 
 protected:
     vector<Zutat> m_Fette;
@@ -25,6 +29,17 @@ protected:
     vector<Zutat> m_Sontiges;
     vector<Zutat> m_Kraeuter;
     vector<Zutat> m_Fluessigkeiten;
+
+    vector<Zutat> *m_pAlleZutaten[8] =  {
+                                            &m_Fette,
+                                            &m_AetherischeOele,
+                                            &m_ParfuemOele,
+                                            &m_TonErden,
+                                            &m_Sontiges,
+                                            &m_Kraeuter,
+                                            &m_Fluessigkeiten,
+                                            NULL
+                                        };
 
     void        InhaltLoeschen(void);
     bool        ZutatLesen(int i, Zutat *pZutat, vector<Zutat> &pZutatenListe);

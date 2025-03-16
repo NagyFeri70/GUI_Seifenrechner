@@ -10,11 +10,14 @@ ZutatenListe::ZutatenListe()
 
 void ZutatenListe::InhaltLoeschen(void)
 {
-    m_Fette.clear();
-    m_AetherischeOele.clear();
-    m_ParfuemOele.clear();
-    m_TonErden.clear();
-    m_Sontiges.clear();
+    int y;
+
+    y = 0;
+    while(NULL != m_pAlleZutaten[y])
+    {
+        (*m_pAlleZutaten[y]).clear();
+        y++;
+    }
 }
 
 string ZutatenListe::LesenAetherischesOelName(unsigned int i)
@@ -26,6 +29,20 @@ string ZutatenListe::LesenAetherischesOelName(unsigned int i)
     if(i < m_AetherischeOele.size())
     {
         l_string = m_AetherischeOele[i].LeseNamen();
+    }
+
+    return(l_string);
+}
+
+string ZutatenListe::LesenTonerdeName(unsigned int i)
+{
+    string l_string;
+
+    l_string.clear();
+
+    if(i < m_TonErden.size())
+    {
+        l_string = m_TonErden[i].LeseNamen();
     }
 
     return(l_string);
@@ -59,6 +76,15 @@ bool ZutatenListe::LesenAetherischesOel(int i, Zutat *pZutat)
     bool RetVal = true;
 
     RetVal = ZutatLesen(i, pZutat, m_AetherischeOele);
+
+    return(RetVal);
+}
+
+bool ZutatenListe::LesenTonerde(int i, Zutat *pZutat)
+{
+    bool RetVal = true;
+
+    RetVal = ZutatLesen(i, pZutat, m_TonErden);
 
     return(RetVal);
 }
@@ -195,6 +221,8 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
         sort(m_TonErden.begin(), m_TonErden.end(), Sortieren);
         sort(m_ParfuemOele.begin(), m_ParfuemOele.end(), Sortieren);
         sort(m_Sontiges.begin(), m_Sontiges.end(), Sortieren);
+        sort(m_Fluessigkeiten.begin(), m_Fluessigkeiten.end(), Sortieren);
+        sort(m_Kraeuter.begin(), m_Kraeuter.end(), Sortieren);
     }
     else
     {

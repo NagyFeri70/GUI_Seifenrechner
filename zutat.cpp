@@ -12,6 +12,17 @@ Zutat::Zutat()
     m_Masse_in_Gramm = 0;
 }
 
+/*
+Zutat Zutat::operator = (const Zutat &other)
+{
+    Zutat l_Zutat;
+
+    return(l_Zutat);
+}
+*/
+
+
+
 string Zutat::LeseNamen(void) const
 {
     return(m_Name);
