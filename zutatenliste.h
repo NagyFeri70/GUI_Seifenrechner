@@ -1,6 +1,7 @@
 #ifndef ZUTATENLISTE_H
 #define ZUTATENLISTE_H
 
+#include <map>
 #include <vector>
 #include "zutat.h"
 
@@ -16,12 +17,15 @@ public:
     bool    LesenFett(int i, Zutat *pZutat);
     bool    LesenAetherischesOel(int i, Zutat *pZutat);
     bool    LesenTonerde(int i, Zutat *pZutat);
+    bool    LesenParfuemOel(int i, Zutat *pZutat);
 
     string  LesenTonerdeName(unsigned int i);
     string  LesenFettName(unsigned int i);
     string  LesenAetherischesOelName(unsigned int i);
+    string  LesenParfuemOelName(unsigned int i);
 
 protected:
+
     vector<Zutat> m_Fette;
     vector<Zutat> m_AetherischeOele;
     vector<Zutat> m_ParfuemOele;
@@ -30,7 +34,8 @@ protected:
     vector<Zutat> m_Kraeuter;
     vector<Zutat> m_Fluessigkeiten;
 
-    vector<Zutat> *m_pAlleZutaten[8] =  {
+
+    vector<Zutat> *m_pAlleZutaten[7] = {
                                             &m_Fette,
                                             &m_AetherischeOele,
                                             &m_ParfuemOele,
@@ -38,7 +43,6 @@ protected:
                                             &m_Sontiges,
                                             &m_Kraeuter,
                                             &m_Fluessigkeiten,
-                                            NULL
                                         };
 
     void        InhaltLoeschen(void);

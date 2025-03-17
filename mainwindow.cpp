@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cmdFettHnzufuegen, SIGNAL(clicked()), SLOT(cmdFettHnzufuegenClicked()));
     connect(ui->cmdAethOelHinzufuegen, SIGNAL(clicked()),  SLOT(cmdAetherischesOelHinzufuegenClicked()));
     connect(ui->cmdTonerdenHinufuegen, SIGNAL(clicked()), SLOT(cmdTonerdeHinzufuegenClicked()));
+    connect(ui->cmdParfuemOelHinzufuegen, SIGNAL(clicked()), SLOT(cmdParfuemOelHinzufuegenClicked()));
 
     // Seifennamen festlegen
     connect(ui->edtSeifenName, SIGNAL(editingFinished()), SLOT(edtSeifenName()));
@@ -83,7 +84,7 @@ void MainWindow::edtSeifenName()
 void MainWindow::cmdZutatenClicked()
 {
     bool DateiOK;
-    DateiOK = m_ZutatenListe.ZutatenDateiOeffnen("../../Zutatenliste.ing");
+    DateiOK = m_ZutatenListe.ZutatenDateiOeffnen("/home/nagyferi/Dokumente/git/GUI_SeifenRechner/Zutatenliste.ing");
 
     if(true == DateiOK)
     {
@@ -112,6 +113,14 @@ void MainWindow::cmdZutatenClicked()
             ui->cmbTonerden->addItem(l_name.c_str());
             i++;
         }  while(l_name.size() > 0);
+
+        i= 0;
+        do
+        {
+            l_name = m_ZutatenListe.LesenParfuemOelName(i);
+            ui->cmbParfuemOele->addItem(l_name.c_str());
+            i++;
+        }  while(l_name.size() > 0);
     }
 }
 
@@ -137,6 +146,40 @@ void MainWindow::cmdFettHnzufuegenClicked()
             char output[100];
 
             sprintf(output, "%dg %s hinzugefügt", fett_in_gramm, fett_name.toStdString().c_str());
+
+            StatusAusgabe(output);
+
+            RezeptAusgeben();
+        }
+        else
+        {
+            StatusAusgabe("Falsche Eingabe");
+        }
+    }
+}
+
+void MainWindow::cmdParfuemOelHinzufuegenClicked()
+{
+    bool ok;
+    int gramm = ui->edtParfuemOele->text().toInt();
+    QString name = ui->cmbParfuemOele->currentText();
+    int index = ui->cmbParfuemOele->currentIndex();
+
+    if(!((gramm > 0) && (gramm <= 1000)))
+    {
+        StatusAusgabe("Unkorrekte Menge eingegeben");
+        return;
+    }
+    else
+    {
+        ok = m_SeifenRezept.ParfuemOelHinzufuegen(index, gramm);
+
+        if(true == ok)
+        {
+            vector <string> Ausgabe;
+            char output[100];
+
+            sprintf(output, "%dg %s hinzugefügt", gramm, name.toStdString().c_str());
 
             StatusAusgabe(output);
 

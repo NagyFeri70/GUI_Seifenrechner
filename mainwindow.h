@@ -43,5 +43,6 @@ private slots:
     void cmdFettHnzufuegenClicked();
     void cmdAetherischesOelHinzufuegenClicked();
     void cmdTonerdeHinzufuegenClicked();
+    void cmdParfuemOelHinzufuegenClicked();
 };
 #endif // MAINWINDOW_H

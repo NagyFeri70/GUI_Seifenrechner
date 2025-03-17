@@ -10,13 +10,9 @@ ZutatenListe::ZutatenListe()
 
 void ZutatenListe::InhaltLoeschen(void)
 {
-    int y;
-
-    y = 0;
-    while(NULL != m_pAlleZutaten[y])
+    for(auto Zutat:m_pAlleZutaten)
     {
-        (*m_pAlleZutaten[y]).clear();
-        y++;
+        (*Zutat).clear();
     }
 }
 
@@ -43,6 +39,20 @@ string ZutatenListe::LesenTonerdeName(unsigned int i)
     if(i < m_TonErden.size())
     {
         l_string = m_TonErden[i].LeseNamen();
+    }
+
+    return(l_string);
+}
+
+string ZutatenListe::LesenParfuemOelName(unsigned int i)
+{
+    string l_string;
+
+    l_string.clear();
+
+    if(i < m_ParfuemOele.size())
+    {
+        l_string = m_ParfuemOele[i].LeseNamen();
     }
 
     return(l_string);
@@ -85,6 +95,15 @@ bool ZutatenListe::LesenTonerde(int i, Zutat *pZutat)
     bool RetVal = true;
 
     RetVal = ZutatLesen(i, pZutat, m_TonErden);
+
+    return(RetVal);
+}
+
+bool ZutatenListe::LesenParfuemOel(int i, Zutat *pZutat)
+{
+    bool RetVal = true;
+
+    RetVal = ZutatLesen(i, pZutat, m_ParfuemOele);
 
     return(RetVal);
 }
@@ -216,13 +235,10 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
             }
         }
 
-        sort(m_Fette.begin(), m_Fette.end(), Sortieren);
-        sort(m_AetherischeOele.begin(), m_AetherischeOele.end(), Sortieren);
-        sort(m_TonErden.begin(), m_TonErden.end(), Sortieren);
-        sort(m_ParfuemOele.begin(), m_ParfuemOele.end(), Sortieren);
-        sort(m_Sontiges.begin(), m_Sontiges.end(), Sortieren);
-        sort(m_Fluessigkeiten.begin(), m_Fluessigkeiten.end(), Sortieren);
-        sort(m_Kraeuter.begin(), m_Kraeuter.end(), Sortieren);
+        for(auto Zutat:m_pAlleZutaten)
+        {
+            sort((*Zutat).begin(), (*Zutat).end(), Sortieren);
+        }
     }
     else
     {
