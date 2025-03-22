@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "./ui_mainwindow.h"
+#include <qwindowdefs.h>
 #include <QMainWindow>
 #include "seifenrezept.h"
 #include "zutatenliste.h"
@@ -30,6 +32,7 @@ private:
 private slots:
     // Zutatenliste oeffnen
     void cmdZutatenClicked();
+    void ZutatZuComcoBox(ZutatenTyp_e typ, QComboBox *ComboBox);
 
     // Seifennamen festlegen
     void edtSeifenName();

@@ -271,7 +271,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Tonerden</string>
+     <string>Parfümöle</string>
     </property>
    </widget>
    <widget class="QComboBox" name="cmbParfuemOele">

@@ -1,6 +1,7 @@
-#include "mainwindow.h"
+
 #include "./ui_mainwindow.h"
 #include <qwindowdefs.h>
+#include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -84,48 +85,27 @@ void MainWindow::cmdZutatenClicked()
 
     if(true == DateiOK)
     {
-        unsigned int i = 0;
-        string l_name;
-
-        do
-        {
-            l_name = m_ZutatenListe.LesenZutatName(FETT, i);
-            ui->cmbFette->addItem(l_name.c_str());
-            i++;
-        }  while(l_name.size() > 0);
-
-        i= 0;
-        do
-        {
-            l_name = m_ZutatenListe.LesenZutatName(AETHERISCHES_OEL, i);
-            ui->cmbAetherischeOele->addItem(l_name.c_str());
-            i++;
-        }  while(l_name.size() > 0);
-
-        i= 0;
-        do
-        {
-            l_name = m_ZutatenListe.LesenZutatName(TONERDE, i);
-            ui->cmbTonerden->addItem(l_name.c_str());
-            i++;
-        }  while(l_name.size() > 0);
-
-        i= 0;
-        do
-        {
-            l_name = m_ZutatenListe.LesenZutatName(PARFUEMOEL, i);
-            ui->cmbParfuemOele->addItem(l_name.c_str());
-            i++;
-        }  while(l_name.size() > 0);
-
-        i= 0;
-        do
-        {
-            l_name = m_ZutatenListe.LesenZutatName(KRAEUTER, i);
-            ui->cmbKraeuter->addItem(l_name.c_str());
-            i++;
-        }  while(l_name.size() > 0);
+        ZutatZuComcoBox(FETT, ui->cmbFette);
+        ZutatZuComcoBox(AETHERISCHES_OEL, ui->cmbAetherischeOele);
+        ZutatZuComcoBox(TONERDE, ui->cmbTonerden);
+        ZutatZuComcoBox(PARFUEMOEL, ui->cmbParfuemOele);
+        ZutatZuComcoBox(KRAEUTER, ui->cmbKraeuter);
     }
+}
+
+void MainWindow::ZutatZuComcoBox(ZutatenTyp_e typ, QComboBox *ComboBox)
+{
+    unsigned int i = 0;
+    string l_name;
+
+    do
+    {
+        l_name = m_ZutatenListe.LesenZutatName(typ, i);
+        ComboBox->addItem(l_name.c_str());
+        i++;
+
+    }  while(l_name.size() > 0);
+
 }
 
 void MainWindow::cmdKraeuterHinzufuegenClicked()
