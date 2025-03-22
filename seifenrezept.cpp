@@ -23,7 +23,16 @@ void SeifenRezept::Berechnen(void)
         m_MengeNaOH   += m_Fette[i].MasseLesen() * m_Fette[i].VerseifungszahlLesen();
     }
 
+    for(i = 0; i < m_Fluessigkeiten.size(); i++)
+    {
+        m_MengeWasser -= m_Fluessigkeiten[i].MasseLesen();
+    }
+
     m_MengeWasser *= 1.0/3.0;
+    if(m_MengeWasser < 0.0f)
+    {
+        m_MengeWasser = 0.0f;
+    }
 }
 
 void SeifenRezept::NamenSetzen(const string &p_Name)

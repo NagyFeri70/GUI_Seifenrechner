@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include <fstream>
 #include <algorithm>
 
@@ -75,6 +76,18 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
 
         InhaltLoeschen();
 
+        getline(eDatei,inhaltzeile);
+        if(string::npos == inhaltzeile.find(("-[Zutatenliste]")))
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Falsches Dateiformat.");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.exec();
+
+            return(false);
+        }
+
         while(getline(eDatei,inhaltzeile))
         {
             /* leere Zeilen ignorieren */
@@ -106,7 +119,7 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
                     }
                     else if((string::npos != inhaltzeile.find("-[Sonstiges]")))
                     {
-                        zutatentyp = SONTIGES;
+                        zutatentyp = SONSTIGES;
                     }
                     else if((string::npos != inhaltzeile.find("-[Kraeuter]")))
                     {
@@ -147,7 +160,7 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
                             m_ParfuemOele.push_back(l_Zutat);
                             break;
                         }
-                        case SONTIGES:
+                        case SONSTIGES:
                         {
                             m_Sontiges.push_back(l_Zutat);
                             break;
@@ -179,6 +192,12 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
     }
     else
     {
+        QMessageBox msgBox;
+        msgBox.setText("Datei nicht gefunden.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+
         RetVal = false;
     }
 

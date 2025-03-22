@@ -29,10 +29,19 @@ private:
 
     void RezeptAusgeben(void);
 
+    void ZutatZuRezept(ZutatenTyp_e typ, QLineEdit *LineEdit, QComboBox *ComboBox);
+    void ZutatZuComcoBox(ZutatenTyp_e typ, QComboBox *ComboBox);
+
 private slots:
     // Zutatenliste oeffnen
     void cmdZutatenClicked();
-    void ZutatZuComcoBox(ZutatenTyp_e typ, QComboBox *ComboBox);
+
+    // Drucken
+    void cmdDruckenClicked();
+
+    // Rezept speichern
+    void cmdRezeptSpeichern();
+
 
     // Seifennamen festlegen
     void edtSeifenName();
@@ -47,5 +56,7 @@ private slots:
     void cmdTonerdeHinzufuegenClicked();
     void cmdParfuemOelHinzufuegenClicked();
     void cmdKraeuterHinzufuegenClicked();
+    void cmdFluessigkeitenHinzufuegenClicked();
+    void cmdSontigesHinzufuegenClicked();
 };
 #endif // MAINWINDOW_H

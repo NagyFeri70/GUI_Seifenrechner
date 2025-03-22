@@ -22,6 +22,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cmdTonerdenHinufuegen, SIGNAL(clicked()), SLOT(cmdTonerdeHinzufuegenClicked()));
     connect(ui->cmdParfuemOelHinzufuegen, SIGNAL(clicked()), SLOT(cmdParfuemOelHinzufuegenClicked()));
     connect(ui->cmdKraeuterHinzufuegen, SIGNAL(clicked()), SLOT(cmdKraeuterHinzufuegenClicked()));
+    connect(ui->cmdFuessigkeitenhHnzufuegen, SIGNAL(clicked()), SLOT(cmdFluessigkeitenHinzufuegenClicked()));
+    connect(ui->cmdSontigesHinzufuegen, SIGNAL(clicked()), SLOT(cmdSontigesHinzufuegenClicked()));
+
+    connect(ui->cmdDrucken, SIGNAL(clicked()), SLOT(cmdDruckenClicked()));
+
+    connect(ui->cmdSpeichern, SIGNAL(clicked()), SLOT(cmdRezeptSpeichern()));
+
+
 
     // Seifennamen festlegen
     connect(ui->edtSeifenName, SIGNAL(editingFinished()), SLOT(edtSeifenName()));
@@ -29,11 +37,23 @@ MainWindow::MainWindow(QWidget *parent)
     // Rezept bearbeiten
     connect(ui->cmdBerechnen, SIGNAL(clicked()), SLOT(cmdBerechnen()));
     connect(ui->cmdLoeschen, SIGNAL(clicked()), SLOT(cmdLoeschen()));
+
+    cmdZutatenClicked();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::cmdDruckenClicked()
+{
+
+}
+
+void MainWindow::cmdRezeptSpeichern()
+{
+
 }
 
 void MainWindow::cmdLoeschen()
@@ -90,6 +110,8 @@ void MainWindow::cmdZutatenClicked()
         ZutatZuComcoBox(TONERDE, ui->cmbTonerden);
         ZutatZuComcoBox(PARFUEMOEL, ui->cmbParfuemOele);
         ZutatZuComcoBox(KRAEUTER, ui->cmbKraeuter);
+        ZutatZuComcoBox(FLUESSIGKEITEN, ui->cmbFluessigkeiten);
+        ZutatZuComcoBox(SONSTIGES, ui->cmbSonstiges);
     }
 }
 
@@ -108,103 +130,56 @@ void MainWindow::ZutatZuComcoBox(ZutatenTyp_e typ, QComboBox *ComboBox)
 
 }
 
+
+void MainWindow::cmdFluessigkeitenHinzufuegenClicked()
+{
+    ZutatZuRezept(FLUESSIGKEITEN, ui->edtFluessigkeiten, ui->cmbFluessigkeiten);
+}
+
+void MainWindow::cmdSontigesHinzufuegenClicked()
+{
+    ZutatZuRezept(SONSTIGES, ui->edtSontiges, ui->cmbSonstiges);
+}
+
 void MainWindow::cmdKraeuterHinzufuegenClicked()
 {
-    bool ok;
-    int fett_in_gramm = ui->edtKraeuter->text().toInt();
-    int fett_index = ui->cmbKraeuter->currentIndex();
-
-    if(!((fett_in_gramm > 0) && (fett_in_gramm <= 1000)))
-    {
-        return;
-    }
-    else
-    {
-        ok = m_SeifenRezept.ZutatHinzufuegen(KRAEUTER, fett_index, fett_in_gramm);
-
-        if(true == ok)
-        {
-            RezeptAusgeben();
-        }
-    }
+    ZutatZuRezept(KRAEUTER, ui->edtKraeuter, ui->cmbKraeuter);
 }
 
 void MainWindow::cmdFettHnzufuegenClicked()
 {
-    bool ok;
-    int fett_in_gramm = ui->edtFettMenge->text().toInt();
-    int fett_index = ui->cmbFette->currentIndex();
-
-    if(!((fett_in_gramm > 0) && (fett_in_gramm <= 1000)))
-    {
-        return;
-    }
-    else
-    {
-        ok = m_SeifenRezept.ZutatHinzufuegen(FETT, fett_index, fett_in_gramm);
-
-        if(true == ok)
-        {
-            RezeptAusgeben();
-        }
-    }
+    ZutatZuRezept(FETT, ui->edtFettMenge, ui->cmbFette);
 }
 
 void MainWindow::cmdParfuemOelHinzufuegenClicked()
 {
-    bool ok;
-    int gramm = ui->edtParfuemOele->text().toInt();
-    int index = ui->cmbParfuemOele->currentIndex();
-
-    if(!((gramm > 0) && (gramm <= 1000)))
-    {
-        return;
-    }
-    else
-    {
-        ok = m_SeifenRezept.ZutatHinzufuegen(PARFUEMOEL, index, gramm);
-
-        if(true == ok)
-        {
-            RezeptAusgeben();
-        }
-    }
+    ZutatZuRezept(PARFUEMOEL, ui->edtParfuemOele, ui->cmbParfuemOele);
 }
 
 void MainWindow::cmdTonerdeHinzufuegenClicked()
 {
-    bool ok;
-    int gramm = ui->edtTonerden->text().toInt();
-    int index = ui->cmbTonerden->currentIndex();
-
-    if(!((gramm > 0) && (gramm <= 1000)))
-    {
-        return;
-    }
-    else
-    {
-        ok = m_SeifenRezept.ZutatHinzufuegen(TONERDE, index, gramm);
-
-        if(true == ok)
-        {
-            RezeptAusgeben();
-        }
-    }
+    ZutatZuRezept(TONERDE, ui->edtTonerden, ui->cmbTonerden);
 }
 
 void MainWindow::cmdAetherischesOelHinzufuegenClicked()
 {
-    bool ok;
-    int gramm = ui->edtAetherischOele->text().toInt();
-    int index = ui->cmbAetherischeOele->currentIndex();
+    ZutatZuRezept(AETHERISCHES_OEL, ui->edtAetherischOele, ui->cmbAetherischeOele);
 
-    if(!((gramm > 0) && (gramm <= 1000)))
+}
+
+void MainWindow::ZutatZuRezept(ZutatenTyp_e typ, QLineEdit *LineEdit, QComboBox *ComboBox)
+{
+    bool ok;
+    int masse_in_gramm = LineEdit->text().toInt();
+    int index = ComboBox->currentIndex();
+
+    if(!((masse_in_gramm > 0) && (masse_in_gramm <= 1000)))
     {
         return;
     }
     else
     {
-        ok = m_SeifenRezept.ZutatHinzufuegen(AETHERISCHES_OEL, index, gramm);
+        ok = m_SeifenRezept.ZutatHinzufuegen(typ, index, masse_in_gramm);
 
         if(true == ok)
         {

@@ -35,7 +35,7 @@ protected:
                             { PARFUEMOEL,       &m_ParfuemOele      },
                             { KRAEUTER,         &m_Kraeuter         },
                             { FLUESSIGKEITEN,   &m_Fluessigkeiten   },
-                            { SONTIGES,         &m_Sontiges         }
+                            { SONSTIGES,         &m_Sontiges         }
                         };
 
     void        InhaltLoeschen(void);

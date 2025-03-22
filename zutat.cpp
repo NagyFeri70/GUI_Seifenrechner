@@ -101,7 +101,7 @@ bool Zutat::EigenschaftenSetzen(ZutatenTyp_e ZutatenTyp, string Eingenschaften)
 
             break;
         }
-        case SONTIGES:
+        case SONSTIGES:
         {
 
             break;
