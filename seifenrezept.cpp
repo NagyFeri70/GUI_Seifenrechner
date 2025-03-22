@@ -47,9 +47,9 @@ bool SeifenRezept::RezeptAusgabeBildschirm(vector<string> *Ausgabe)
 
     Ausgabe->push_back(m_Name + "\n");
 
-    for(auto zutatenliste:m_pAlleZutaten)
+    for(auto zutatenliste:m_mapAlleZutaten)
     {
-        for(Zutat l_zutat:(*zutatenliste))
+        for(Zutat l_zutat:(*zutatenliste.second))
         {
             sprintf(ch, "%4d", l_zutat.MasseLesen());
 
@@ -81,18 +81,16 @@ bool SeifenRezept::RezeptAusgabeBildschirm(vector<string> *Ausgabe)
     return RetVal;
 }
 
-bool  SeifenRezept::AetherischesOelHinzufuegen(int p_nummer, int p_gramm)
+bool  SeifenRezept::ZutatHinzufuegen(ZutatenTyp_e typ, int index, int masse_in_gramm)
 {
     bool RetVal = true;
     Zutat l_zutat;
-    int i;
-    bool found = false;
 
     if(NULL != m_pZutatenListe)
     {
-        m_pZutatenListe->LesenAetherischesOel(p_nummer, &l_zutat);
+        m_pZutatenListe->LesenZutat(typ, index, &l_zutat);
 
-        RetVal = ZutatHinzufuegen(l_zutat, p_gramm, m_AetherischeOele);
+        RetVal = ZutatHinzufuegen(typ, l_zutat, masse_in_gramm);
     }
     else
     {
@@ -103,107 +101,50 @@ bool  SeifenRezept::AetherischesOelHinzufuegen(int p_nummer, int p_gramm)
     return(RetVal);
 }
 
-bool SeifenRezept::FettHinzufuegen(int p_Fettnummer, int fett_in_gramm)
+
+ bool  SeifenRezept::ZutatHinzufuegen(ZutatenTyp_e typ, Zutat &l_zutat, int masse_in_gramm)
 {
-    bool RetVal = true;
-    Zutat l_zutat;
+     bool RetVal = true;
+     vector<Zutat> *dummy;
+     bool found = false;
+     int i = 0;
 
-    if(NULL != m_pZutatenListe)
-    {
-        m_pZutatenListe->LesenFett(p_Fettnummer, &l_zutat);
+     BerechnungLoeschen();
 
-        RetVal = ZutatHinzufuegen(l_zutat, fett_in_gramm, m_Fette);
-    }
-    else
-    {
-        RetVal = false;
-    }
+     l_zutat.MasseSetzen(masse_in_gramm);
 
-    return(RetVal);
-}
+     dummy = m_mapAlleZutaten[typ];
 
-bool SeifenRezept::ParfuemOelHinzufuegen(int p_nummer, int p_gramm)
-{
-    bool RetVal = true;
-    Zutat l_zutat;
-    int i;
-    bool found = false;
+     for(Zutat &p_zutat:(*dummy))
+     {
+         if(p_zutat.LeseNamen() == l_zutat.LeseNamen())
+         {
+             found = true;
+             break;
+         }
 
-    if(NULL != m_pZutatenListe)
-    {
-        m_pZutatenListe->LesenParfuemOel(p_nummer, &l_zutat);
+         i++;
+     }
 
-        RetVal = ZutatHinzufuegen(l_zutat, p_gramm, m_ParfuemOele);
-    }
-    else
-    {
-        RetVal = false;
-    }
+     if(false == found)
+     {
+         (*dummy).push_back(l_zutat);
+     }
+     else
+     {
+         (*dummy)[i] = l_zutat;
+     }
 
-
-    return(RetVal);
-}
-
-bool SeifenRezept::TonerdeHinzufuegen(int p_nummer, int p_gramm)
-{
-    bool RetVal = true;
-    Zutat l_zutat;
-    int i;
-    bool found = false;
-
-    if(NULL != m_pZutatenListe)
-    {
-        m_pZutatenListe->LesenTonerde(p_nummer, &l_zutat);
-
-        RetVal = ZutatHinzufuegen(l_zutat, p_gramm, m_TonErden);
-    }
-    else
-    {
-        RetVal = false;
-    }
-
-
-    return(RetVal);
-}
-
-bool SeifenRezept::ZutatHinzufuegen(Zutat &p_Zutat, unsigned int p_MasseInGramm, vector<Zutat> &p_ZutatenListe)
-{
-    bool RetVal = true;
-    int i;
-    bool found = false;
-
-    BerechnungLoeschen();
-
-    p_Zutat.MasseSetzen(p_MasseInGramm);
-
-    for(i = 0; i < p_ZutatenListe.size(); i++)
-    {
-        if(p_Zutat.LeseNamen() == p_ZutatenListe[i].LeseNamen())
-        {
-            found = true;
-            break;
-        }
-    }
-
-    if(false == found)
-    {
-        p_ZutatenListe.push_back(p_Zutat);
-    }
-    else
-    {
-        p_ZutatenListe[i] = p_Zutat;
-    }
-
-    return(RetVal);
+     return(RetVal);
 }
 
 bool SeifenRezept::ZutatLoeschen(const string &p_string)
 {
     bool RetVal = false;
 
-    for(auto zutatenliste:m_pAlleZutaten)
+    for(auto zutatenliste:m_mapAlleZutaten)
     {
-        RetVal = ZutatLoeschen(p_string, zutatenliste);
+        RetVal = ZutatLoeschen(p_string, zutatenliste.second);
         if(true == RetVal)
         {
             return(RetVal);

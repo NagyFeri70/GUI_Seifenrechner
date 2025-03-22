@@ -26,7 +26,6 @@ private:
     SeifenRezept m_SeifenRezept;
 
     void RezeptAusgeben(void);
-    void StatusAusgabe(string Ausgabe);
 
 private slots:
     // Zutatenliste oeffnen
@@ -44,5 +43,6 @@ private slots:
     void cmdAetherischesOelHinzufuegenClicked();
     void cmdTonerdeHinzufuegenClicked();
     void cmdParfuemOelHinzufuegenClicked();
+    void cmdKraeuterHinzufuegenClicked();
 };
 #endif // MAINWINDOW_H

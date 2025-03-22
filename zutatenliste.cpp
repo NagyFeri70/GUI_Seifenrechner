@@ -10,100 +10,37 @@ ZutatenListe::ZutatenListe()
 
 void ZutatenListe::InhaltLoeschen(void)
 {
-    for(auto Zutat:m_pAlleZutaten)
+    for(auto dummy:m_mapAlleZutaten)
     {
-        (*Zutat).clear();
+        (*dummy.second).clear();
     }
 }
 
-string ZutatenListe::LesenAetherischesOelName(unsigned int i)
+string ZutatenListe::LesenZutatName(ZutatenTyp_e typ, unsigned int i)
 {
     string l_string;
+    vector<Zutat> *dummy;
+
+    dummy = m_mapAlleZutaten[typ];
 
     l_string.clear();
 
-    if(i < m_AetherischeOele.size())
+    if(i < (*dummy).size())
     {
-        l_string = m_AetherischeOele[i].LeseNamen();
+        l_string = (*dummy)[i].LeseNamen();
     }
 
     return(l_string);
 }
 
-string ZutatenListe::LesenTonerdeName(unsigned int i)
-{
-    string l_string;
 
-    l_string.clear();
-
-    if(i < m_TonErden.size())
-    {
-        l_string = m_TonErden[i].LeseNamen();
-    }
-
-    return(l_string);
-}
-
-string ZutatenListe::LesenParfuemOelName(unsigned int i)
-{
-    string l_string;
-
-    l_string.clear();
-
-    if(i < m_ParfuemOele.size())
-    {
-        l_string = m_ParfuemOele[i].LeseNamen();
-    }
-
-    return(l_string);
-}
-
-string ZutatenListe::LesenFettName(unsigned int i)
-{
-    string l_string;
-
-    l_string.clear();
-
-    if(i < m_Fette.size())
-    {
-        l_string = m_Fette[i].LeseNamen();
-    }
-
-    return(l_string);
-}
-
-bool ZutatenListe::LesenFett(int i, Zutat *pZutat)
+bool ZutatenListe::LesenZutat(ZutatenTyp_e typ, int index, Zutat *l_zutat)
 {
     bool RetVal = true;
+    vector<Zutat> *dummy;
 
-    RetVal = ZutatLesen(i, pZutat, m_Fette);
-
-    return(RetVal);
-}
-
-bool ZutatenListe::LesenAetherischesOel(int i, Zutat *pZutat)
-{
-    bool RetVal = true;
-
-    RetVal = ZutatLesen(i, pZutat, m_AetherischeOele);
-
-    return(RetVal);
-}
-
-bool ZutatenListe::LesenTonerde(int i, Zutat *pZutat)
-{
-    bool RetVal = true;
-
-    RetVal = ZutatLesen(i, pZutat, m_TonErden);
-
-    return(RetVal);
-}
-
-bool ZutatenListe::LesenParfuemOel(int i, Zutat *pZutat)
-{
-    bool RetVal = true;
-
-    RetVal = ZutatLesen(i, pZutat, m_ParfuemOele);
+    dummy = m_mapAlleZutaten[typ];
+    *l_zutat = (*dummy)[index];
 
     return(RetVal);
 }
@@ -235,9 +172,9 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
             }
         }
 
-        for(auto Zutat:m_pAlleZutaten)
+        for(auto ZutatenListe:m_mapAlleZutaten)
         {
-            sort((*Zutat).begin(), (*Zutat).end(), Sortieren);
+            sort((*ZutatenListe.second).begin(), (*ZutatenListe.second).end(), Sortieren);
         }
     }
     else

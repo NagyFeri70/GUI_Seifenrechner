@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cmdAethOelHinzufuegen, SIGNAL(clicked()),  SLOT(cmdAetherischesOelHinzufuegenClicked()));
     connect(ui->cmdTonerdenHinufuegen, SIGNAL(clicked()), SLOT(cmdTonerdeHinzufuegenClicked()));
     connect(ui->cmdParfuemOelHinzufuegen, SIGNAL(clicked()), SLOT(cmdParfuemOelHinzufuegenClicked()));
+    connect(ui->cmdKraeuterHinzufuegen, SIGNAL(clicked()), SLOT(cmdKraeuterHinzufuegenClicked()));
 
     // Seifennamen festlegen
     connect(ui->edtSeifenName, SIGNAL(editingFinished()), SLOT(edtSeifenName()));
@@ -47,17 +48,12 @@ void MainWindow::cmdLoeschen()
 
         if(false == ist_geloescht)
         {
-            StatusAusgabe("Eintrag nicht gefunden");
+
         }
         else
         {
-            StatusAusgabe(QAuswahl.toStdString() + " -> gelöscht");
             RezeptAusgeben();
         }
-    }
-    else
-    {
-        StatusAusgabe("Nichts ausgwählt");
     }
 }
 
@@ -93,7 +89,7 @@ void MainWindow::cmdZutatenClicked()
 
         do
         {
-            l_name = m_ZutatenListe.LesenFettName(i);
+            l_name = m_ZutatenListe.LesenZutatName(FETT, i);
             ui->cmbFette->addItem(l_name.c_str());
             i++;
         }  while(l_name.size() > 0);
@@ -101,7 +97,7 @@ void MainWindow::cmdZutatenClicked()
         i= 0;
         do
         {
-            l_name = m_ZutatenListe.LesenAetherischesOelName(i);
+            l_name = m_ZutatenListe.LesenZutatName(AETHERISCHES_OEL, i);
             ui->cmbAetherischeOele->addItem(l_name.c_str());
             i++;
         }  while(l_name.size() > 0);
@@ -109,7 +105,7 @@ void MainWindow::cmdZutatenClicked()
         i= 0;
         do
         {
-            l_name = m_ZutatenListe.LesenTonerdeName(i);
+            l_name = m_ZutatenListe.LesenZutatName(TONERDE, i);
             ui->cmbTonerden->addItem(l_name.c_str());
             i++;
         }  while(l_name.size() > 0);
@@ -117,10 +113,39 @@ void MainWindow::cmdZutatenClicked()
         i= 0;
         do
         {
-            l_name = m_ZutatenListe.LesenParfuemOelName(i);
+            l_name = m_ZutatenListe.LesenZutatName(PARFUEMOEL, i);
             ui->cmbParfuemOele->addItem(l_name.c_str());
             i++;
         }  while(l_name.size() > 0);
+
+        i= 0;
+        do
+        {
+            l_name = m_ZutatenListe.LesenZutatName(KRAEUTER, i);
+            ui->cmbKraeuter->addItem(l_name.c_str());
+            i++;
+        }  while(l_name.size() > 0);
+    }
+}
+
+void MainWindow::cmdKraeuterHinzufuegenClicked()
+{
+    bool ok;
+    int fett_in_gramm = ui->edtKraeuter->text().toInt();
+    int fett_index = ui->cmbKraeuter->currentIndex();
+
+    if(!((fett_in_gramm > 0) && (fett_in_gramm <= 1000)))
+    {
+        return;
+    }
+    else
+    {
+        ok = m_SeifenRezept.ZutatHinzufuegen(KRAEUTER, fett_index, fett_in_gramm);
+
+        if(true == ok)
+        {
+            RezeptAusgeben();
+        }
     }
 }
 
@@ -128,32 +153,19 @@ void MainWindow::cmdFettHnzufuegenClicked()
 {
     bool ok;
     int fett_in_gramm = ui->edtFettMenge->text().toInt();
-    QString fett_name = ui->cmbFette->currentText();
     int fett_index = ui->cmbFette->currentIndex();
 
     if(!((fett_in_gramm > 0) && (fett_in_gramm <= 1000)))
     {
-        StatusAusgabe("Unkorrekte Fettmenge eingegeben");
         return;
     }
     else
     {
-        ok = m_SeifenRezept.FettHinzufuegen(fett_index, fett_in_gramm);
+        ok = m_SeifenRezept.ZutatHinzufuegen(FETT, fett_index, fett_in_gramm);
 
         if(true == ok)
         {
-            vector <string> Ausgabe;
-            char output[100];
-
-            sprintf(output, "%dg %s hinzugefügt", fett_in_gramm, fett_name.toStdString().c_str());
-
-            StatusAusgabe(output);
-
             RezeptAusgeben();
-        }
-        else
-        {
-            StatusAusgabe("Falsche Eingabe");
         }
     }
 }
@@ -162,32 +174,19 @@ void MainWindow::cmdParfuemOelHinzufuegenClicked()
 {
     bool ok;
     int gramm = ui->edtParfuemOele->text().toInt();
-    QString name = ui->cmbParfuemOele->currentText();
     int index = ui->cmbParfuemOele->currentIndex();
 
     if(!((gramm > 0) && (gramm <= 1000)))
     {
-        StatusAusgabe("Unkorrekte Menge eingegeben");
         return;
     }
     else
     {
-        ok = m_SeifenRezept.ParfuemOelHinzufuegen(index, gramm);
+        ok = m_SeifenRezept.ZutatHinzufuegen(PARFUEMOEL, index, gramm);
 
         if(true == ok)
         {
-            vector <string> Ausgabe;
-            char output[100];
-
-            sprintf(output, "%dg %s hinzugefügt", gramm, name.toStdString().c_str());
-
-            StatusAusgabe(output);
-
             RezeptAusgeben();
-        }
-        else
-        {
-            StatusAusgabe("Falsche Eingabe");
         }
     }
 }
@@ -196,32 +195,19 @@ void MainWindow::cmdTonerdeHinzufuegenClicked()
 {
     bool ok;
     int gramm = ui->edtTonerden->text().toInt();
-    QString name = ui->cmbTonerden->currentText();
     int index = ui->cmbTonerden->currentIndex();
 
     if(!((gramm > 0) && (gramm <= 1000)))
     {
-        StatusAusgabe("Unkorrekte Menge eingegeben");
         return;
     }
     else
     {
-        ok = m_SeifenRezept.TonerdeHinzufuegen(index, gramm);
+        ok = m_SeifenRezept.ZutatHinzufuegen(TONERDE, index, gramm);
 
         if(true == ok)
         {
-            vector <string> Ausgabe;
-            char output[100];
-
-            sprintf(output, "%dg %s hinzugefügt", gramm, name.toStdString().c_str());
-
-            StatusAusgabe(output);
-
             RezeptAusgeben();
-        }
-        else
-        {
-            StatusAusgabe("Falsche Eingabe");
         }
     }
 }
@@ -230,32 +216,19 @@ void MainWindow::cmdAetherischesOelHinzufuegenClicked()
 {
     bool ok;
     int gramm = ui->edtAetherischOele->text().toInt();
-    QString name = ui->cmbAetherischeOele->currentText();
     int index = ui->cmbAetherischeOele->currentIndex();
 
     if(!((gramm > 0) && (gramm <= 1000)))
     {
-        StatusAusgabe("Unkorrekte Menge eingegeben");
         return;
     }
     else
     {
-        ok = m_SeifenRezept.AetherischesOelHinzufuegen(index, gramm);
+        ok = m_SeifenRezept.ZutatHinzufuegen(AETHERISCHES_OEL, index, gramm);
 
         if(true == ok)
         {
-            vector <string> Ausgabe;
-            char output[100];
-
-            sprintf(output, "%dg %s hinzugefügt", gramm, name.toStdString().c_str());
-
-            StatusAusgabe(output);
-
             RezeptAusgeben();
-        }
-        else
-        {
-            StatusAusgabe("Falsche Eingabe");
         }
     }
 }
@@ -275,7 +248,3 @@ void MainWindow::RezeptAusgeben(void)
     }
 }
 
-void  MainWindow::StatusAusgabe(string Ausgabe)
-{
-    ui->lblFehlerAusgabe->setText(Ausgabe.c_str());
-}

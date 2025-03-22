@@ -14,15 +14,8 @@ public:
 
     bool    ZutatenDateiOeffnen(string Dateiname);
 
-    bool    LesenFett(int i, Zutat *pZutat);
-    bool    LesenAetherischesOel(int i, Zutat *pZutat);
-    bool    LesenTonerde(int i, Zutat *pZutat);
-    bool    LesenParfuemOel(int i, Zutat *pZutat);
-
-    string  LesenTonerdeName(unsigned int i);
-    string  LesenFettName(unsigned int i);
-    string  LesenAetherischesOelName(unsigned int i);
-    string  LesenParfuemOelName(unsigned int i);
+    bool    LesenZutat(ZutatenTyp_e typ, int index, Zutat *l_zutat);
+    string  LesenZutatName(ZutatenTyp_e typ, unsigned int i);
 
 protected:
 
@@ -34,16 +27,16 @@ protected:
     vector<Zutat> m_Kraeuter;
     vector<Zutat> m_Fluessigkeiten;
 
-
-    vector<Zutat> *m_pAlleZutaten[7] = {
-                                            &m_Fette,
-                                            &m_AetherischeOele,
-                                            &m_ParfuemOele,
-                                            &m_TonErden,
-                                            &m_Sontiges,
-                                            &m_Kraeuter,
-                                            &m_Fluessigkeiten,
-                                        };
+    map<ZutatenTyp_e, vector<Zutat> *> m_mapAlleZutaten =
+                        {
+                            { FETT,             &m_Fette            },
+                            { AETHERISCHES_OEL, &m_AetherischeOele  },
+                            { TONERDE,          &m_TonErden         },
+                            { PARFUEMOEL,       &m_ParfuemOele      },
+                            { KRAEUTER,         &m_Kraeuter         },
+                            { FLUESSIGKEITEN,   &m_Fluessigkeiten   },
+                            { SONTIGES,         &m_Sontiges         }
+                        };
 
     void        InhaltLoeschen(void);
     bool        ZutatLesen(int i, Zutat *pZutat, vector<Zutat> &pZutatenListe);

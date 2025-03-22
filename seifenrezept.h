@@ -17,11 +17,7 @@ public:
     void Berechnen(void);
     bool ZutatLoeschen(const string &p_string);
 
-    bool AetherischesOelHinzufuegen(int p_nummer, int p_gramm);
-    bool FettHinzufuegen(int p_Fettnummer, int fett_in_gramm);
-    bool TonerdeHinzufuegen(int p_Fettnummer, int fett_in_gramm);
-    bool ParfuemOelHinzufuegen(int p_Fettnummer, int fett_in_gramm);
-
+    bool ZutatHinzufuegen(ZutatenTyp_e typ, int index, int masse_in_gramm);
 
     private:
         ZutatenListe *m_pZutatenListe;
@@ -31,7 +27,7 @@ public:
         float  m_MengeWasser;
 
         void BerechnungLoeschen(void);
-        bool ZutatHinzufuegen(Zutat &p_Zutat, unsigned int p_MasseInGramm, vector<Zutat> &ZutatenListe);
+        bool ZutatHinzufuegen(ZutatenTyp_e typ, Zutat &l_zutat, int masse_in_gramm);
 
         bool ZutatLoeschen(const string &p_string, vector<Zutat> *ZutatenListe);
 };

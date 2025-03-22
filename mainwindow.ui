@@ -100,19 +100,6 @@
      <string>Menge in Gramm</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lblFehlerAusgabe">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>590</y>
-      <width>501</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>(leer)</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -308,6 +295,52 @@
     </property>
     <property name="text">
      <string>Hinzufügen</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="cmdKraeuterHinzufuegen">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>220</y>
+      <width>80</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hinzufügen</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cmbKraeuter">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>220</y>
+      <width>230</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblTonerden_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Kräuter</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="edtKraeuter">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>220</y>
+      <width>113</width>
+      <height>25</height>
+     </rect>
     </property>
    </widget>
   </widget>
