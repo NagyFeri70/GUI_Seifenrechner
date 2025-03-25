@@ -32,6 +32,8 @@ private:
     void ZutatZuRezept(ZutatenTyp_e typ, QLineEdit *LineEdit, QComboBox *ComboBox);
     void ZutatZuComcoBox(ZutatenTyp_e typ, QComboBox *ComboBox);
 
+    void ZutatenDateiOeffnen(string Dateiname);
+
 private slots:
     // Zutatenliste oeffnen
     void cmdZutatenClicked();
@@ -41,6 +43,7 @@ private slots:
 
     // Rezept speichern
     void cmdRezeptSpeichern();
+    void cmdSeifenrezeptOeffnenClicked();
 
 
     // Seifennamen festlegen

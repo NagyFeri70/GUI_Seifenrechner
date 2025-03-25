@@ -1,6 +1,7 @@
 #include "seifenrezept.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <fstream>
 
 using namespace std;
 
@@ -88,6 +89,130 @@ bool SeifenRezept::RezeptAusgabeBildschirm(vector<string> *Ausgabe)
 
 
     return RetVal;
+}
+
+bool SeifenRezept::RezeptOeffnen(string Dateiname)
+{
+    bool RetVal = true;
+    ifstream datei(Dateiname);
+
+    if(!datei.fail())
+    {
+        string          inhaltzeile;
+        bool            name_found = false;
+        Zutat           zutat;
+        ZutatenTyp_e    Typ;
+        vector<Zutat>  *Liste;
+
+        InhaltLoeschen();
+
+        getline(datei,inhaltzeile);
+        if(string::npos == inhaltzeile.find(DateiKennung.c_str()))
+        {
+            return(false);
+        }
+
+        while(getline(datei,inhaltzeile))
+        {
+            if(0 != inhaltzeile.length())
+            {
+                if(string::npos != inhaltzeile.find("-["))
+                {
+                    if(string::npos != inhaltzeile.find(DateiNamensKennung))
+                    {
+                        name_found = true;
+                    }
+                    else
+                    {
+                        for(auto &Kennzeichnung:m_mapDateiInhaltsKennzeichnung)
+                        {
+                            if(string::npos != inhaltzeile.find(Kennzeichnung.second))
+                            {
+                                name_found = false;
+                                Typ = Kennzeichnung.first;
+                                Liste = m_mapAlleZutaten[Kennzeichnung.first];
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if(true == name_found)
+                    {
+                        m_Name = inhaltzeile;
+                    }
+                    else
+                    {
+                        zutat.EigenschaftenSetzen(Typ, inhaltzeile, true);
+                        (*Liste).push_back(zutat);
+                    }
+                }
+            }
+        }
+
+        datei.close();
+    }
+    else
+    {
+        RetVal = false;
+    }
+
+    return(RetVal);
+}
+
+bool SeifenRezept::RezeptSpeichern(string Dateiname)
+{
+    bool RetVal = true;
+    ofstream datei(Dateiname, ios::out);
+
+    if(!datei.fail())
+    {
+        datei << DateiKennung << endl << endl;
+        datei << DateiNamensKennung << endl;
+        datei << m_Name << endl << endl;
+
+        for(auto &Kennzeichnung:m_mapDateiInhaltsKennzeichnung)
+        {
+            vector<Zutat> * Zutaten = m_mapAlleZutaten[Kennzeichnung.first];
+
+            datei << Kennzeichnung.second << endl;
+
+            for(auto &Zutat:(*Zutaten))
+            {
+                datei << Zutat.LeseNamen();
+
+                if(FETT == Kennzeichnung.first)
+                {
+                    datei << ";" << Zutat.VerseifungszahlLesen();
+
+                    if(true == Zutat.IstFest())
+                    {
+                        datei << ";" << "fest";
+                    }
+                    else
+                    {
+                        datei << ";" << "fluessig";
+                    }
+                }
+
+                datei << ";" << Zutat.MasseLesen();
+
+                datei << endl;
+            }
+
+            datei << endl;
+
+        }
+
+        datei.close();
+    }
+    else
+    {
+        RetVal = false;
+    }
+
+    return(RetVal);
 }
 
 bool  SeifenRezept::ZutatHinzufuegen(ZutatenTyp_e typ, int index, int masse_in_gramm)

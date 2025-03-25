@@ -1,4 +1,5 @@
-
+#include <QMessageBox>
+#include <QFileDialog>
 #include "./ui_mainwindow.h"
 #include <qwindowdefs.h>
 #include "mainwindow.h"
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cmdDrucken, SIGNAL(clicked()), SLOT(cmdDruckenClicked()));
 
     connect(ui->cmdSpeichern, SIGNAL(clicked()), SLOT(cmdRezeptSpeichern()));
+    connect(ui->cmdSeifenrezeptOeffnen, SIGNAL(clicked()), SLOT(cmdSeifenrezeptOeffnenClicked()));
 
 
 
@@ -38,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cmdBerechnen, SIGNAL(clicked()), SLOT(cmdBerechnen()));
     connect(ui->cmdLoeschen, SIGNAL(clicked()), SLOT(cmdLoeschen()));
 
-    cmdZutatenClicked();
+    ZutatenDateiOeffnen("/home/nagyferi/Dokumente/git/GUI_SeifenRechner/Zutatenliste.ing");
 }
 
 MainWindow::~MainWindow()
@@ -48,12 +50,44 @@ MainWindow::~MainWindow()
 
 void MainWindow::cmdDruckenClicked()
 {
-
+    QMessageBox::critical(this, "Fehler", "Das ist ein Fehler");
 }
 
 void MainWindow::cmdRezeptSpeichern()
 {
+    bool ok;
+    QString DateiName = QFileDialog::getSaveFileName(this,
+                                                     tr("Datei zum Speichern auswählen"),
+                                                     "/home/nagyferi/Dokumente/git/GUI_SeifenRechner",
+                                                     tr("Seifenrezept (*.srzpt)"));
 
+    ok = m_SeifenRezept.RezeptSpeichern(DateiName.toStdString());
+
+    if(false == ok)
+    {
+         QMessageBox::critical(this, "Fehler", "Rezept konnte nicht gepeichert werden");
+    }
+}
+
+void MainWindow::cmdSeifenrezeptOeffnenClicked()
+{
+    bool ok;
+    QString DateiName = QFileDialog::getOpenFileName(this,
+                                                     tr("Datei zum Speichern auswählen"),
+                                                     "/home/nagyferi/Dokumente/git/GUI_SeifenRechner",
+                                                     tr("Seifenrezept (*.srzpt)"));
+
+    ok = m_SeifenRezept.RezeptOeffnen(DateiName.toStdString());
+
+    if(false == ok)
+    {
+        QMessageBox::critical(this, "Fehler", "Rezept konnte nicht gepeichert werden");
+    }
+    else
+    {
+        ui->edtSeifenName->setText(m_SeifenRezept.NamenLesen().c_str());
+        RezeptAusgeben();
+    }
 }
 
 void MainWindow::cmdLoeschen()
@@ -98,10 +132,18 @@ void MainWindow::edtSeifenName()
     RezeptAusgeben();
 }
 
+
 void MainWindow::cmdZutatenClicked()
 {
+    string Dateiname("test");
+
+    ZutatenDateiOeffnen(Dateiname);
+}
+
+void MainWindow::ZutatenDateiOeffnen(string Dateiname)
+{
     bool DateiOK;
-    DateiOK = m_ZutatenListe.ZutatenDateiOeffnen("/home/nagyferi/Dokumente/git/GUI_SeifenRechner/Zutatenliste.ing");
+    DateiOK = m_ZutatenListe.ZutatenDateiOeffnen(Dateiname);
 
     if(true == DateiOK)
     {
@@ -112,6 +154,10 @@ void MainWindow::cmdZutatenClicked()
         ZutatZuComcoBox(KRAEUTER, ui->cmbKraeuter);
         ZutatZuComcoBox(FLUESSIGKEITEN, ui->cmbFluessigkeiten);
         ZutatZuComcoBox(SONSTIGES, ui->cmbSonstiges);
+    }
+    else
+    {
+        QMessageBox::critical(this, "Fehler", "Fehler beim Öffnen der Datei");
     }
 }
 

@@ -1,4 +1,3 @@
-#include <QMessageBox>
 #include <fstream>
 #include <algorithm>
 
@@ -79,12 +78,6 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
         getline(eDatei,inhaltzeile);
         if(string::npos == inhaltzeile.find(("-[Zutatenliste]")))
         {
-            QMessageBox msgBox;
-            msgBox.setText("Falsches Dateiformat.");
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setDefaultButton(QMessageBox::Ok);
-            msgBox.exec();
-
             return(false);
         }
 
@@ -136,7 +129,7 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
                 }
                 else
                 {
-                    l_Zutat.EigenschaftenSetzen(zutatentyp, inhaltzeile);
+                    l_Zutat.EigenschaftenSetzen(zutatentyp, inhaltzeile, false);
 
                     switch(zutatentyp)
                     {
@@ -189,15 +182,11 @@ bool ZutatenListe::ZutatenDateiOeffnen(string Dateiname)
         {
             sort((*ZutatenListe.second).begin(), (*ZutatenListe.second).end(), Sortieren);
         }
+
+        eDatei.close();
     }
     else
     {
-        QMessageBox msgBox;
-        msgBox.setText("Datei nicht gefunden.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.exec();
-
         RetVal = false;
     }
 

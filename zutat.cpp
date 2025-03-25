@@ -44,7 +44,7 @@ bool Zutat::MasseSetzen(int Masse)
     return(RetVal);
 }
 
-bool Zutat::EigenschaftenSetzen(ZutatenTyp_e ZutatenTyp, string Eingenschaften)
+bool Zutat::EigenschaftenSetzen(ZutatenTyp_e ZutatenTyp, string Eingenschaften, bool MasseLesen)
 {
     bool RetVal = true;
     istringstream is;
@@ -111,6 +111,17 @@ bool Zutat::EigenschaftenSetzen(ZutatenTyp_e ZutatenTyp, string Eingenschaften)
             /* unbekannte Typen ignorieren */
             break;
         }
+    }
+
+    if(true == MasseLesen)
+    {
+        string value;
+        getline(is, value, ';');
+        m_Masse_in_Gramm = atoi(value.c_str());
+    }
+    else
+    {
+        m_Masse_in_Gramm = 0;
     }
 
     return(RetVal);

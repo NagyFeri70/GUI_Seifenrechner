@@ -38,6 +38,17 @@ protected:
                             { SONSTIGES,         &m_Sontiges         }
                         };
 
+    map<ZutatenTyp_e, string> m_mapDateiInhaltsKennzeichnung  =
+                                        {
+                                            { FETT,             "-[Fette]"              },
+                                            { AETHERISCHES_OEL, "-[Aetherische Oele]"   },
+                                            { TONERDE,          "-[Tonerde]"            },
+                                            { PARFUEMOEL,       "-[ParfuemOel]"         },
+                                            { KRAEUTER,         "-[Kraeuter]"           },
+                                            { FLUESSIGKEITEN,   "-[Flüssigkeiten]"      },
+                                            { SONSTIGES,        "-[Sonstiges]"          },
+                                        };
+
     void        InhaltLoeschen(void);
     bool        ZutatLesen(int i, Zutat *pZutat, vector<Zutat> &pZutatenListe);
 

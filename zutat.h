@@ -25,13 +25,14 @@ class Zutat
 public:
     Zutat();
 
-    bool        EigenschaftenSetzen(ZutatenTyp_e ZustatenTyp, string Eingenschaften);
+    bool        EigenschaftenSetzen(ZutatenTyp_e ZustatenTyp, string Eingenschaften, bool MasseLesen);
     bool        MasseSetzen(int Masse);
     string      LeseNamen(void) const;
 
-    int         MasseLesen(void)            { return(m_Masse_in_Gramm); };
-    string      NamenLesen(void)            { return(m_Name); };
-    float       VerseifungszahlLesen(void)  { return(m_Verseifungszahl); };
+    int         MasseLesen(void)            { return(m_Masse_in_Gramm);     };
+    string      NamenLesen(void)            { return(m_Name);               };
+    float       VerseifungszahlLesen(void)  { return(m_Verseifungszahl);    };
+    bool        IstFest(void)               { return(m_ist_fest);           };
 
     //Zutat       operator = (const Zutat &other);
 

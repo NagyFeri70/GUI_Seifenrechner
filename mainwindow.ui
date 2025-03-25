@@ -461,6 +461,20 @@
      <string>Drucken</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="cmdSeifenrezeptOeffnen">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>460</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Seifenrezept
+öffnen</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

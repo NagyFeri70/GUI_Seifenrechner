@@ -18,9 +18,16 @@ public:
     bool ZutatLoeschen(const string &p_string);
 
     bool ZutatHinzufuegen(ZutatenTyp_e typ, int index, int masse_in_gramm);
+    bool RezeptSpeichern(string Dateiname);
+    bool RezeptOeffnen(string Dateiname);
+
+    string NamenLesen(void)     { return(m_Name); };
 
     private:
         ZutatenListe *m_pZutatenListe;
+
+        const string DateiKennung           = "-[Seifenrezept]";
+        const string DateiNamensKennung     = "-[Name]";
 
         string m_Name;
         float  m_MengeNaOH;
